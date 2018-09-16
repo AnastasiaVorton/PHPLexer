@@ -41,7 +41,29 @@ public class Token {
         T_DOUBLE_ARROW, // array key => value assignment (=>)
         T_DOUBLE_CAST, // casting to double ( (real), (double) or (float) )
         T_DOUBLE_COLON, // (::) TODO exaplain where used
-
+        T_ECHO, // output strings (echo)
+        T_ELLIPSIS, // a variable number of arguments in a function (...)
+        T_ELSE, // else keyword (else)
+        T_ELSEIF, // elseif keyword (elseif)
+        T_EMPTY, // determine whether a variable is empty (empty)
+        T_ENCAPSED_AND_WHITESPACE, // variable used in string declaration ("&varname")
+        T_ENDDECLARE, // enddeclare keyword (enddeclare)
+        T_ENDFOR, // endfor keyword (endfor)
+        T_ENDFOREACH, // endforeach keyword (endforeach)
+        T_ENDIF, // endif keyword (endif)
+        T_ENDSWITCH, // endswitch keyword (endswitch)
+        T_ENDWHILE, // endwhile keyword (endwhile)
+        T_END_HEREDOC, // a way to delimit strings () TODO how it's represented?
+        T_EVAL, // evaluate a string as PHP code (eval())
+        T_EXIT, // output a message and terminate the current script (exit or die)
+        T_EXTENDS, // inheritance keyword (extends)
+        T_FILE, // file magic constant (__FILE__)
+        T_FINAL, // final keyword (final)
+        T_FINALLY, // an exception block specified after or instead of catch blocks (finally)
+        T_FOR, // for keyword (for)
+        T_FOREACH, // foreach keyword (foreach)
+        T_FUNCTION, // function declaration keyword (function or cfunction)
+        T_FUNC_C, // function magic constant (__FUNCTION__)
     }
 
 
