@@ -1,7 +1,11 @@
+package phplexer;
+
+import core.Token;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum TokenTest {
+public enum PHPToken implements Token {
     // TODO ALWAYS ESCAPE (\\) BEFORE +, *, |, (, ), {, } ETC
     T_ABSTRACT("abstract"), // class abstraction (abstract)
     T_AND_EQUAL("&="),  // bitwise and assignment operator (&=)
@@ -140,7 +144,7 @@ public enum TokenTest {
 
     private final Pattern pattern;
 
-    TokenTest(String regex) {
+    PHPToken(String regex) {
         pattern = Pattern.compile("^" + regex);
     }
 
@@ -153,6 +157,10 @@ public enum TokenTest {
         return -1;
     }
 
+    @Override
+    public Pattern getPattern() {
+        return pattern;
+    }
 }
 
 
