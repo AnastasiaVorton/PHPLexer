@@ -1,7 +1,9 @@
+package lexer;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum TokenTest {
+public enum Token {
     // TODO ALWAYS ESCAPE (\\) BEFORE +, *, |, (, ), {, } ETC
     T_ABSTRACT("abstract"), // class abstraction (abstract)
     T_AND_EQUAL("&="),  // bitwise and assignment operator (&=)
@@ -140,7 +142,7 @@ public enum TokenTest {
 
     private final Pattern pattern;
 
-    TokenTest(String regex) {
+    Token(String regex) {
         pattern = Pattern.compile("^" + regex);
     }
 
