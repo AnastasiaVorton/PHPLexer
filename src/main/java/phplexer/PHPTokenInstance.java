@@ -1,17 +1,18 @@
-package lexer;
+package phplexer;
 
+import core.TokenInstance;
 import java.util.regex.Pattern;
 
 /**
  * This class represents a particular token instance found in the provided source.
  */
-public class TokenInstance {
+public class PHPTokenInstance implements TokenInstance<PHPToken> {
     private String type; // TODO: decide whether this property is needed at all
 
     /**
      * The token this class represents an instance of.
      */
-    private Token token;
+    private PHPToken token;
 
     /**
      * The line of code this instance is found at.
@@ -23,7 +24,7 @@ public class TokenInstance {
      */
     private int offset;
 
-    TokenInstance(String name, Token value, int position, int offset, Pattern pattern) {
+    PHPTokenInstance(String name, PHPToken value, int position, int offset, Pattern pattern) {
         this.type = name;
         this.token = value;
         this.line = position;
@@ -34,7 +35,7 @@ public class TokenInstance {
         return type;
     }
 
-    public Token getToken() {
+    public PHPToken getToken() {
         return token;
     }
 
