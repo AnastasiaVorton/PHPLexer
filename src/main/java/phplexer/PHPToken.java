@@ -9,13 +9,13 @@ public enum PHPToken implements Token {
     // TODO ALWAYS ESCAPE (\\) BEFORE +, *, |, (, ), {, } ETC
     T_ABSTRACT("abstract"), // class abstraction (abstract)
     T_AND_EQUAL("&="),  // bitwise and assignment operator (&=)
-    T_ARRAY("array\\("), // array declaration ( array() ) TODO regexp
+    T_ARRAY("array\\("), // array declaration ( array() )
     T_ARRAY_CAST("(array)"), // casting to array ( (array) )
     T_AS("as"), // foreach operator (as)
     T_BAD_CHARACTER(""), // anything below ASCII 32 except \t (0x09), \n (0x0a) and \r (0x0d) TODO regexp (this is how Pattern defines all ASII "\p{ASCII}	All ASCII:[\x00-\x7F])"
     T_BOOLEAN_AND("&&"), // logical and operator (&&)
     T_BOOLEAN_OR("\\|\\|"), // logical or operator (||)
-    T_BOOL_CAST("[\\(bool\\)|\\(boolean\\)]"), // casting to boolean ( (bool) or (boolean) ) TODO make sure how to do or in regexp (| sign inside double quotes?)
+    T_BOOL_CAST("[\\(bool\\)|\\(boolean\\)]"), // casting to boolean ( (bool) or (boolean) )
     T_BREAK("break"), // break operator (break)
     T_CALLABLE("callable"), // callable keyword (callable)
     T_CASE("case"), // switch-case operator (case)
@@ -151,8 +151,8 @@ public enum PHPToken implements Token {
     int endOfMatch(String s) {
         Matcher m = pattern.matcher(s);
 
-        if (m.find()) {
-            return m.end();
+        if (m.find()) { // Attempts to find the next subsequence of the input sequence that matches the pattern.
+            return m.end(); // Returns the offset after the last character matched.
         }
         return -1;
     }
