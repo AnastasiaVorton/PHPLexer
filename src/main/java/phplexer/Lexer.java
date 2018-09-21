@@ -16,11 +16,9 @@ public class Lexer {
     private Set<Character> blankChars = new HashSet<Character>();
 
     public Lexer(String filePath) {
-//        try (Stream<String> st = Files.lines(Paths.get(filePath))) {
         try (Stream<String> st = Files.lines(Paths.get(filePath))) {
             st.forEach((line) -> {
                 input.append(line).append(System.lineSeparator());
-//                input.append(System.lineSeparator());
             });
         } catch (IOException ex) {
             exausthed = true;
@@ -29,10 +27,10 @@ public class Lexer {
         }
 
         char[] arrayTest = input.toString().toCharArray();
-        System.out.println("printing input " + arrayTest);
-        for (char a : arrayTest) {
-            System.out.println(a);
-        }
+//        System.out.println("printing input " + arrayTest);
+//        for (char a : arrayTest) {
+//            System.out.println(a);
+//        }
 
         blankChars.add('\r');
         blankChars.add('\n');
@@ -61,7 +59,7 @@ public class Lexer {
             return;
         }
 
-        System.out.println("About to get exausthed");
+//        System.out.println("About to get exausthed");
 
         exausthed = true;
 
@@ -77,7 +75,7 @@ public class Lexer {
             charsToDelete++;
         }
 
-        System.out.println("Deleting " + charsToDelete + " characters");
+//        System.out.println("Deleting " + charsToDelete + " characters");
 
         if (charsToDelete > 0) {
             input.delete(0, charsToDelete);
@@ -93,7 +91,7 @@ public class Lexer {
                 lexema = input.substring(0, end);
                 input.delete(0, end);
 
-                System.out.println("Found a lexeme, deleted its characters, input left: " + input);
+//                System.out.println("Found a lexeme, deleted its characters, input left: " + input);
                 return true;
             }
         }
