@@ -1,3 +1,6 @@
-public static function callIt(callable $func) {
-    call_user_func($func);
+try {
+    echo inverse(5) . "\n";
+    echo inverse(0) . "\n";
+} catch (Exception $e) {
+    echo 'Caught exception: ',  $e->getMessage(), "\n";
 }
