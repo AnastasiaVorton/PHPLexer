@@ -13,24 +13,16 @@ public class Lexer {
     private String lexema;
     private boolean exausthed = false;
     private String errorMessage = "";
-    private Set<Character> blankChars = new HashSet<Character>();
+    private Set<Character> blankChars = new HashSet<>();
 
     public Lexer(String filePath) {
         try (Stream<String> st = Files.lines(Paths.get(filePath))) {
-            st.forEach((line) -> {
-                input.append(line).append(System.lineSeparator());
-            });
+            st.forEach((line) -> input.append(line).append(System.lineSeparator()));
         } catch (IOException ex) {
             exausthed = true;
             errorMessage = "Could not read file: " + filePath;
             return;
         }
-
-        char[] arrayTest = input.toString().toCharArray();
-//        System.out.println("printing input " + arrayTest);
-//        for (char a : arrayTest) {
-//            System.out.println(a);
-//        }
 
         blankChars.add('\r');
         blankChars.add('\n');

@@ -3,6 +3,7 @@ import core.SourceReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PushbackReader;
 
 /**
  * A SourceReader that reads the input character by character.
@@ -12,26 +13,34 @@ public class SymbolSourceReader implements SourceReader {
     /**
      * File reader used to read the file with given name.
      */
-    private FileReader fileReader;
+    private PushbackReader reader;
 
     public SymbolSourceReader(String fileName) throws FileNotFoundException {
-        this.fileReader = new FileReader(fileName);
+        this.reader = new PushbackReader(new FileReader(fileName));
     }
 
     @Override
     public String getNextSymbol() throws IOException {
         try {
-            int symbolCode = fileReader.read();
+            int symbolCode = reader.read();
             if (symbolCode != -1) {
                 return Character.toString((char) symbolCode);
             } else {
                 // we reached the end of file
-                fileReader.close();
+                reader.close();
                 return null;
             }
         } catch(Exception e) {
-            fileReader.close();
+            reader.close();
             throw e;
         }
+    }
+
+    @Override
+    public String peekSymbol() throws IOException {
+        String next = getNextSymbol();
+        reader.unread(next.charAt(0));
+
+        return next;
     }
 }
