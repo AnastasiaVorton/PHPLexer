@@ -29,8 +29,9 @@ public class SymbolSourceReader implements SourceReader {
                 fileReader.close();
                 return null;
             }
-        } finally {
+        } catch(Exception e) {
             fileReader.close();
+            throw e;
         }
     }
 }
