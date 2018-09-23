@@ -32,7 +32,7 @@ public enum PHPToken implements Token {
      * Must be matched manually by the lexical analyzer, due to the token being encapsulated by open/close
      * comment operators or open comment operator and the end of the line.
      */
-    T_COMMENT(null),
+    T_COMMENT("\\\\/\\\\/.*|#.*|\\\\/\\\\*(.|\\\\n)*\\\\*\\\\/"),
 
     T_LITERAL_NUMBER("(\\d+)|\\.\\d+"), // double numbers (0.21 etc) CHECKED
 
