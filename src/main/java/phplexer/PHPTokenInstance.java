@@ -11,10 +11,10 @@ public class PHPTokenInstance implements TokenInstance<PHPToken> {
     private int line;
     private int offset;
 
-    PHPTokenInstance(String lexeme, PHPToken token, int position, int offset) {
+    PHPTokenInstance(String lexeme, PHPToken token, int line, int offset) {
         this.lexeme = lexeme;
         this.token = token;
-        this.line = position;
+        this.line = line;
         this.offset = offset;
     }
 
