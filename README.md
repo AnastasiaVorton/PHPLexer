@@ -1,4 +1,4 @@
-#PHP lexical analyser
+# PHP lexical analyser
 
 (done by Bulat Khabirov and Anastasiia Repryntseva)
 
