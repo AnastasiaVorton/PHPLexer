@@ -3,7 +3,6 @@ package phplexer;
 import core.LexicalAnalysisException;
 import core.LexicalAnalyzer;
 import core.SourceReader;
-
 import java.io.IOException;
 
 /**
