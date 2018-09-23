@@ -79,7 +79,11 @@ public enum PHPToken implements Token {
     T_OBJECT_OPERATOR("->"), // object operator CHECKED
 
     /** Reserved keywords */
-    T_KEYWORD("yield from|trait|array|list|yield|while|namespace|var|use|try|throw|switch|catch|callable|foreach|for|require_once|require|cfunction|function|if|new|public|private|protected|return|abstract|static|as|class|break|case|echo|clone|const|continue|declare|default|do|elseif|else|empty|enddeclare|endforeach|endfor|endif|endswitch|endwhile|exit|die|extends|finally|final|global|goto|implements|include_once|include|instanceof|insteadof|interface|isset"),
+    T_KEYWORD("yield from|trait|array|list|yield|while|namespace|var|use|try|throw|switch|catch|callable|foreach|for"+
+            "|require_once|require|cfunction|function|if|new|public|private|protected|return|abstract|static|as|class"+
+            "|break|case|echo|clone|const|continue|declare|default|do|elseif|else|empty|enddeclare|endforeach|endfor"+
+            "|endif|endswitch|endwhile|exit|die|extends|finally|final|global|goto|implements|include_once|include"+
+            "|instanceof|insteadof|interface|isset"),
     /** Identifiers, s.a keywords, function names, class names etc */
     T_IDENTIFIER("[a-zA-Z_][a-zA-Z0-9_]*");
 
