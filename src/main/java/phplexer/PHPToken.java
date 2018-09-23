@@ -8,11 +8,15 @@ import java.util.regex.Pattern;
 public enum PHPToken implements Token {
     /** Logical operators. */
     T_OPERATOR_LOGICAL("&&|\\|\\||and|or|xor|!"),
-    T_OPERATOR_ARITHMETIC("\\+|-|\\*|\\/|%|\\*\\*"), // CHECKED
-    T_OPERATOR_ASSIGNMENT("&=|\\.=|\\/=|-=|%=|\\*=|\\|=|\\+=|\\*\\*=|<<=|>>=|\\^=|="), // CHECKED
+    /** Arithmetic operators including power (**) */
+    T_OPERATOR_ARITHMETIC("\\+|-|\\*|\\/|%|\\*\\*"),
+    /** Assignment operators */
+    T_OPERATOR_ASSIGNMENT("&=|\\.=|\\/=|-=|%=|\\*=|\\|=|\\+=|\\*\\*=|<<=|>>=|\\^=|="),
 
-    T_TAG_OPEN("<\\?=|<\\?php|<\\?|<%=|<%"), // escaping from HTML CHECKED
-    T_TAG_CLOSE("\\?\\>|%\\>"), // escaping tag (?> or %>) CHECKED
+    /** Escaping from HTML */
+    T_TAG_OPEN("<\\?=|<\\?php|<\\?|<%=|<%"),
+    /** Escaping tag */
+    T_TAG_CLOSE("\\?\\>|%\\>"),
 
     /** Opening curly bracket, i.e. brace. */
     T_BRACE_OPEN("\\{"),
@@ -34,9 +38,11 @@ public enum PHPToken implements Token {
      */
     T_COMMENT("\\\\/\\\\/.*|#.*|\\\\/\\\\*(.|\\\\n)*\\\\*\\\\/"),
 
-    T_LITERAL_NUMBER("(\\d+)|\\.\\d+"), // double numbers (0.21 etc) CHECKED
+    /** Integer and floating point numbers (including hexadecimal). */
+    T_LITERAL_NUMBER("(\\d+)|\\.\\d+|0[xX][0-9a-fA-F]+"), // integer and floating point numbers (including hexadecimal)
 
-    T_COALESCE("\\?\\?"), // null Coalescing operator (??) CHECKED
+    /** Null Coalescing operator (??) . */
+    T_COALESCE("\\?\\?"), // null Coalescing operator (??)
 
     T_COMMA(","), // comma CHECKED
     T_INC_DEC("--|\\+\\+"), // decrementing/INCREMENTING operator (--) CHECKED
@@ -52,7 +58,7 @@ public enum PHPToken implements Token {
     T_REFERENCE("&\\$\\w+"), // pass parameter by reference CHECKED
     T_CONCAT("\\."), // CHECKED
     T_KEYWORD("yield from|trait|array|list|yield|while|namespace|var|use|try|throw|switch|catch|callable|foreach|for|require_once|require|cfunction|function|if|new|public|private|protected|return|abstract|static|as|class|break|case|echo|clone|const|continue|declare|default|do|elseif|else|empty|enddeclare|endforeach|endfor|endif|endswitch|endwhile|exit|die|extends|finally|final|global|goto|implements|include_once|include|instanceof|insteadof|interface|isset"),
-    T_IDENTIFIER("\\w+"), // identifiers, e.g. keywords like parent and self, function names, class names and more are matched. See also T_CONSTANT_ENCAPSED_STRING. CHECKED
+    T_IDENTIFIER("[a-zA-Z_$][a-zA-Z_$0-9]*"), // identifiers, e.g. keywords like parent and self, function names, class names and more are matched. See also T_CONSTANT_ENCAPSED_STRING. CHECKED
     T_START_HEREDOC("<<<"), // starting heredoc
 
     T_CONSTANT_ENCAPSED_STRING("'.*'|\".*\""); // CHECKED
