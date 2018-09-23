@@ -8,14 +8,10 @@ import core.TokenInstance;
 public class PHPTokenInstance implements TokenInstance<PHPToken> {
     private String lexeme;
     private PHPToken token;
-    private int line;
-    private int offset;
 
-    PHPTokenInstance(String lexeme, PHPToken token, int line, int offset) {
+    PHPTokenInstance(String lexeme, PHPToken token) {
         this.lexeme = lexeme;
         this.token = token;
-        this.line = line;
-        this.offset = offset;
     }
 
     public String getLexeme() {
@@ -24,13 +20,5 @@ public class PHPTokenInstance implements TokenInstance<PHPToken> {
 
     public PHPToken getToken() {
         return token;
-    }
-
-    public int getLine() {
-        return line;
-    }
-
-    public int getOffset() {
-        return offset;
     }
 }

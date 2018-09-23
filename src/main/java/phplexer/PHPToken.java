@@ -52,11 +52,6 @@ public enum PHPToken implements Token {
      * comment operators or open comment operator and the end of the line.
      */
     T_COMMENT("\\\\/\\\\/.*|#.*|\\\\/\\\\*(.|\\\\n)*\\\\*\\\\/"),
-    /**
-     * PHP Heredoc. Read more about it at php.net.
-     * Must be matched manually, because of its complex structure.
-     */
-    T_HEREDOC("<<<"),
 
     /** Integer and floating point numbers (including binary (0b10101), octal (01234) and hexadecimal (0xaf)). */
     T_LITERAL_NUMBER("(\\d+)|\\.\\d+|0[xX][0-9a-fA-F]+|0[bB][0-1]+"),
@@ -76,7 +71,7 @@ public enum PHPToken implements Token {
     /** Comparison operators. */
     T_COMPARISON("==|===|!=|<>|!==|<|>|<=|>=|<=>"),
     /** Object operator, used in object scope to access methods and properties of an object */
-    T_OBJECT_OPERATOR("->"), // object operator CHECKED
+    T_OBJECT_OPERATOR("->"),
 
     /** Reserved keywords */
     T_KEYWORD("yield from|trait|array|list|yield|while|namespace|var|use|try|throw|switch|catch|callable|foreach|for"+

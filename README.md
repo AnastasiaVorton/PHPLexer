@@ -21,7 +21,7 @@ if buffer is not empty go to *step 3*;
 - Step 3: find longest regexp match;
 - Step 4: if found, return and delete the lexeme from the buffer;
 
-P.S. Comments, heredocs and string literals are beyond the scope of the algorithm described above and are handled
+P.S. Comments and string literals are beyond the scope of the algorithm described above and are handled
 manually.
 
 #### Input/Output
