@@ -6,17 +6,32 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum PHPToken implements Token {
+    /** Escaping from HTML */
+    T_TAG_OPEN("<\\?=|<\\?php|<\\?|<%=|<%"),
+    /** Escaping tag */
+    T_TAG_CLOSE("\\?\\>|%\\>"),
+
     /** Logical operators. */
     T_OPERATOR_LOGICAL("&&|\\|\\||and|or|xor|!"),
     /** Arithmetic operators including power (**) */
     T_OPERATOR_ARITHMETIC("\\+|-|\\*|\\/|%|\\*\\*"),
     /** Assignment operators */
     T_OPERATOR_ASSIGNMENT("&=|\\.=|\\/=|-=|%=|\\*=|\\|=|\\+=|\\*\\*=|<<=|>>=|\\^=|="),
+    /** Ampersand operator. Separated from bitwise, because can also be pass-by-reference operator. */
+    T_OPERATOR_AMPERSAND("&"),
+    /** Bitwise operations operators. */
+    T_OPERATOR_BITWISE("<<|>>|\\||\\^|~"),
+    /** Null Coalescing operator (??) . */
+    T_OPERATOR_COALESCE("\\?\\?"), // null Coalescing operator (??)
+    /** Dot operator, used for string concatenation. */
+    T_OPERATOR_CONCAT("\\."),
+    T_OPERATOR_DOLLAR("\\$"),
 
-    /** Escaping from HTML */
-    T_TAG_OPEN("<\\?=|<\\?php|<\\?|<%=|<%"),
-    /** Escaping tag */
-    T_TAG_CLOSE("\\?\\>|%\\>"),
+    /** Well, semicolon ¯\_(ツ)_/¯ */
+    T_SEMICOLON(";"),
+    T_COMMA(","),
+    /** Namespace separator '\'. Used for accessing identifiers nested in a namespace. */
+    T_NAMESPACE_SEPARATOR("\\\\"),
 
     /** Opening curly bracket, i.e. brace. */
     T_BRACE_OPEN("\\{"),
@@ -37,14 +52,20 @@ public enum PHPToken implements Token {
      * comment operators or open comment operator and the end of the line.
      */
     T_COMMENT("\\\\/\\\\/.*|#.*|\\\\/\\\\*(.|\\\\n)*\\\\*\\\\/"),
+    /**
+     * PHP Heredoc. Read more about it at php.net.
+     * Must be matched manually, because of its complex structure.
+     */
+    T_HEREDOC("<<<"),
 
-    /** Integer and floating point numbers (including hexadecimal). */
-    T_LITERAL_NUMBER("(\\d+)|\\.\\d+|0[xX][0-9a-fA-F]+"), // integer and floating point numbers (including hexadecimal)
+    /** Integer and floating point numbers (including binary (0b10101), octal (01234) and hexadecimal (0xaf)). */
+    T_LITERAL_NUMBER("(\\d+)|\\.\\d+|0[xX][0-9a-fA-F]+|0[bB][0-1]+"),
+    /**
+     * String literals. Must be matched manually because of its complex structure.
+     */
+    T_LITERAL_STRING("'.*'|\".*\""),
 
-    /** Null Coalescing operator (??) . */
-    T_COALESCE("\\?\\?"), // null Coalescing operator (??)
 
-    T_COMMA(","), // comma CHECKED
     T_INC_DEC("--|\\+\\+"), // decrementing/INCREMENTING operator (--) CHECKED
     T_DOUBLE_ARROW("\\=\\>"), // array key => value assignment (=>) CHECKED
     T_DOUBLE_COLON("::"), // (::) CHECKED
@@ -52,21 +73,13 @@ public enum PHPToken implements Token {
     T_COMPARISON("==|===|!=|<>|!==|<|>|<=|>=|<=>"), // comparison operator (==) CHECKED
     T_OBJECT_OPERATOR("->"), // object operator CHECKED
 
-    T_SEMICOLON(";"), // semicolon CHECKED
-    T_BITWISE("<<|>>|&|\\||\\^|~"), // bitwise operator CHECKED
-    T_VARIABLE("\\$\\w+"), // variable declaration CHECKED
-    T_REFERENCE("&\\$\\w+"), // pass parameter by reference CHECKED
-    T_CONCAT("\\."), // CHECKED
     T_KEYWORD("yield from|trait|array|list|yield|while|namespace|var|use|try|throw|switch|catch|callable|foreach|for|require_once|require|cfunction|function|if|new|public|private|protected|return|abstract|static|as|class|break|case|echo|clone|const|continue|declare|default|do|elseif|else|empty|enddeclare|endforeach|endfor|endif|endswitch|endwhile|exit|die|extends|finally|final|global|goto|implements|include_once|include|instanceof|insteadof|interface|isset"),
-    T_IDENTIFIER("[a-zA-Z_$][a-zA-Z_$0-9]*"), // identifiers, e.g. keywords like parent and self, function names, class names and more are matched. See also T_CONSTANT_ENCAPSED_STRING. CHECKED
-    T_START_HEREDOC("<<<"), // starting heredoc
-
-    T_CONSTANT_ENCAPSED_STRING("'.*'|\".*\""); // CHECKED
+    T_IDENTIFIER("[a-zA-Z_][a-zA-Z0-9_]*"); // identifiers, e.g. keywords like parent and self, function names, class names and more are matched. See also T_CONSTANT_ENCAPSED_STRING. CHECKED
 
     private final Pattern pattern;
 
     PHPToken(String regex) {
-        pattern = Pattern.compile(regex);
+        pattern = Pattern.compile("^(" + regex + ")");
     }
 
     int endOfMatch(String s) {

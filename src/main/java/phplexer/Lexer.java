@@ -83,7 +83,6 @@ public class Lexer {
                 lexema = input.substring(0, end);
                 input.delete(0, end);
 
-//                System.out.println("Found a lexeme, deleted its characters, input left: " + input);
                 return true;
             }
         }
