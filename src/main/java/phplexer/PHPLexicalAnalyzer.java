@@ -3,7 +3,6 @@ package phplexer;
 import core.LexicalAnalysisException;
 import core.LexicalAnalyzer;
 import java.io.IOException;
-import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -29,42 +28,96 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
 
     @Override
     public PHPTokenInstance getNextToken() throws LexicalAnalysisException, IOException {
-        // last time we put more chars than the length of the found identifier
-        // so try to find more identifiers
-        if (buffer.length() != 0) return matchCurrentBufferAndResetReaderCursor();
+        try {
+            // last time we put more chars than the length of the found identifier
+            // so try to find more identifiers
+            if (buffer.length() != 0) return matchAndResetCurrentBuffer();
 
-        int charIndex;
-        // read until the end of file
-        while ((charIndex = reader.read()) != -1) {
-            char next = (char) charIndex;
+            int charIndex;
+            // read until the end of file
+            while ((charIndex = reader.read()) != -1) {
+                char next = (char) charIndex;
 
-            // gather symbols until we're sure that its the end of the current token
-            if (!endOfTokenSymbols.contains(next)) {
-                buffer.append(next);
-                continue;
+                // handle special cases
+                switch (next) {
+                    case '\'':
+                        // special case: single line string literal
+                        String singleLine = handleStartEndLexeme("\'", false, true);
+                        return new PHPTokenInstance("\'" + singleLine + "\'", PHPToken.T_LITERAL_STRING);
+                    case '\"':
+                        // special case: multiline string literal
+                        String multiline = handleStartEndLexeme("\'", true, true);
+                        return new PHPTokenInstance("\"" + multiline + "\"", PHPToken.T_LITERAL_STRING);
+
+                        default: break;
+                }
+
+                // gather symbols until we're sure that its the end of the current token
+                if (!endOfTokenSymbols.contains(next)) {
+                    buffer.append(next);
+                    continue;
+                }
+
+                // skip end of token characters
+                if (buffer.length() == 0) continue;
+
+                // reached obvious end of token
+                break;
             }
 
-            // skip end of token characters
-            if (buffer.length() == 0) continue;
+            PHPTokenInstance result = matchAndResetCurrentBuffer();
+            if (result == null) {
+                // reached the end, close the reader
+                reader.close();
+            }
 
-            // reached obvious end of token
-            break;
+            return result;
+        } catch (Exception e) {
+            // Close the reader and rethrow the exception
+            reader.close();
+            throw e;
         }
-
-        return matchCurrentBufferAndResetReaderCursor();
     }
 
-    private PHPTokenInstance matchCurrentBufferAndResetReaderCursor() throws LexicalAnalysisException, IOException {
+    /**
+     * Iterates through all PHPToken cases and tries to find a match in the current buffer.
+     * Deletes a matching lexeme from the buffer, if one is found.
+     * @return a token instance containing the information about the token that was found. null if buffer is empty.
+     * @throws LexicalAnalysisException thrown if no matching lexeme was found in the buffer.
+     */
+    private PHPTokenInstance matchAndResetCurrentBuffer() throws LexicalAnalysisException, IOException {
         if (buffer.length() == 0) return null;
 
+        // handle special cases
+        if (buffer.length() >= 2) {
+            switch (buffer.substring(0, 2)) {
+                case "//":
+                    // single line comments
+                    String slashComment = handleStartEndLexeme("\n", false, false);
+                    buffer = new StringBuilder();
+                    return new PHPTokenInstance("//" + slashComment, PHPToken.T_COMMENT);
+
+                case "/*":
+                    // multiline comments
+                    String multiline = handleStartEndLexeme("*/", true, false);
+                    buffer = new StringBuilder();
+                    return new PHPTokenInstance("/*" + multiline + "*/", PHPToken.T_COMMENT);
+            }
+        } else if (buffer.length() >= 1 && buffer.substring(0, 1).equals("#")) {
+            // single line comments
+            String singleLine = handleStartEndLexeme("\n", false, false);
+            buffer = new StringBuilder();
+            return new PHPTokenInstance("#" + singleLine, PHPToken.T_COMMENT);
+        }
+
+        // try to match all patterns with current buffer
         PHPTokenInstance bestGuess = null;
-        for (PHPToken t : PHPToken.values()) {
-            int end = t.endOfMatch(buffer.toString());
+        for (PHPToken token : PHPToken.values()) {
+            int end = token.endOfMatch(buffer.toString());
 
             if (end != -1) {
                 String lexeme = buffer.substring(0, end);
-                // TODO: add line calculation
-                PHPTokenInstance instance = new PHPTokenInstance(lexeme, t, 0, end - lexeme.length());
+                PHPTokenInstance instance = new PHPTokenInstance(lexeme, token);
 
                 // obey longest match rule, i.e. find longest matching token
                 if (bestGuess == null || bestGuess.getLexeme().length() < instance.getLexeme().length()) {
@@ -74,16 +127,50 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
         }
 
         if (bestGuess == null) {
-            // TODO: add position calculation
+            // After going through all the tokens, we didn't find a match
+            // Thus, throw a lexical analysis error
             throw new LexicalAnalysisException(0, 0);
         } else {
-//            System.out.println("Found token: " + bestGuess.getToken() + ", lexeme: " + bestGuess.getLexeme());
-//            System.out.println("Buffer before deleting found token: " + buffer.toString());
             // reset reader cursor to the end of consumed token's lexeme
             buffer.delete(0, bestGuess.getLexeme().length());
-//            System.out.println("Buffer after deleting found token: " + buffer.toString() + ", length: " + buffer.length());
 
             return bestGuess;
         }
+    }
+
+    private String handleStartEndLexeme(String closingString, boolean isMultiline, boolean failsOnEof)
+            throws IOException, LexicalAnalysisException {
+        StringBuilder lexemeBuilder = new StringBuilder();
+
+        while (true) {
+            int charIndex = reader.read();
+            if (charIndex == -1) {
+                // if its the end of file and we still didn't finish our string, then its an error
+                if (failsOnEof) {
+                    throw new LexicalAnalysisException(0, 0);
+                } else {
+                    break;
+                }
+            }
+
+            String next = Character.toString((char) charIndex);
+            lexemeBuilder.append(next);
+
+            if (lexemeBuilder.length() >= closingString.length()) {
+                String currentEnding = lexemeBuilder
+                        .substring(lexemeBuilder.length() - closingString.length(), lexemeBuilder.length());
+                if (currentEnding.equals(closingString)) {
+                    // found an end
+                    return lexemeBuilder.toString().replace(closingString, "");
+                }
+            }
+
+            if ((next.equals("\n") || next.equals("\r")) && !isMultiline) {
+                // end of line while still in the cycle, means we didn't find second ' symbol, and it's an error
+                throw new LexicalAnalysisException(0, 0);
+            }
+        }
+
+        return lexemeBuilder.toString();
     }
 }

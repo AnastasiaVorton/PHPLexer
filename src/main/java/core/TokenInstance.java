@@ -11,16 +11,6 @@ public interface TokenInstance<T extends Token> {
     T getToken();
 
     /**
-     * The line of source code this instance is found at.
-     */
-    int getLine();
-
-    /**
-     * Offset from the beginning of the line to the position, this instance was found at.
-     */
-    int getOffset();
-
-    /**
      * Lexeme found in the source code.
      */
     String getLexeme();
