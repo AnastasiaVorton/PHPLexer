@@ -22,7 +22,7 @@ public enum PHPToken implements Token {
     /** Bitwise operations operators. */
     T_OPERATOR_BITWISE("<<|>>|\\||\\^|~"),
     /** Null Coalescing operator (??) . */
-    T_OPERATOR_COALESCE("\\?\\?"), // null Coalescing operator (??)
+    T_OPERATOR_COALESCE("\\?\\?"),
     /** Dot operator, used for string concatenation. */
     T_OPERATOR_CONCAT("\\."),
     T_OPERATOR_DOLLAR("\\$"),
@@ -65,16 +65,23 @@ public enum PHPToken implements Token {
      */
     T_LITERAL_STRING("'.*'|\".*\""),
 
-
-    T_INC_DEC("--|\\+\\+"), // decrementing/INCREMENTING operator (--) CHECKED
-    T_DOUBLE_ARROW("\\=\\>"), // array key => value assignment (=>) CHECKED
-    T_DOUBLE_COLON("::"), // (::) CHECKED
-    T_ELLIPSIS("\\.\\.\\."), // a variable number of arguments in a function (...) CHECKED
-    T_COMPARISON("==|===|!=|<>|!==|<|>|<=|>=|<=>"), // comparison operator (==) CHECKED
+    /** Increment and decrement operators */
+    T_INC_DEC("--|\\+\\+"),
+    /** Array key - value assignment operator. */
+    T_DOUBLE_ARROW("\\=\\>"),
+    /** Scope Resolution Operator. */
+    T_DOUBLE_COLON("::"),
+    /** Operator denoting variable number of arguments in a function. */
+    T_ELLIPSIS("\\.\\.\\."),
+    /** Comparison operators. */
+    T_COMPARISON("==|===|!=|<>|!==|<|>|<=|>=|<=>"),
+    /** Object operator, used in object scope to access methods and properties of an object */
     T_OBJECT_OPERATOR("->"), // object operator CHECKED
 
+    /** Reserved keywords */
     T_KEYWORD("yield from|trait|array|list|yield|while|namespace|var|use|try|throw|switch|catch|callable|foreach|for|require_once|require|cfunction|function|if|new|public|private|protected|return|abstract|static|as|class|break|case|echo|clone|const|continue|declare|default|do|elseif|else|empty|enddeclare|endforeach|endfor|endif|endswitch|endwhile|exit|die|extends|finally|final|global|goto|implements|include_once|include|instanceof|insteadof|interface|isset"),
-    T_IDENTIFIER("[a-zA-Z_][a-zA-Z0-9_]*"); // identifiers, e.g. keywords like parent and self, function names, class names and more are matched. See also T_CONSTANT_ENCAPSED_STRING. CHECKED
+    /** Identifiers, s.a keywords, function names, class names etc */
+    T_IDENTIFIER("[a-zA-Z_][a-zA-Z0-9_]*");
 
     private final Pattern pattern;
 
