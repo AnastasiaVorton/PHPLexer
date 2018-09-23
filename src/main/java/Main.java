@@ -1,9 +1,6 @@
 import core.LexicalAnalyzer;
 import core.TokenInstance;
-import phplexer.Lexer;
 import phplexer.PHPLexicalAnalyzer;
-import phplexer.PHPTokenInstance;
-
 import java.io.FileReader;
 import java.io.Reader;
 
