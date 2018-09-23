@@ -15,17 +15,7 @@ public class LexicalAnalysisException extends Exception {
      */
     private int offset;
 
-    public LexicalAnalysisException(int line, int offset) {
-        super("A lexical analysis error occurred at line " + line + "offset " + offset);
-        this.line = line;
-        this.offset = offset;
-    }
-
-    public int getLine() {
-        return line;
-    }
-
-    public int getOffset() {
-        return offset;
+    public LexicalAnalysisException() {
+        super("A lexical analysis error occurred");
     }
 }

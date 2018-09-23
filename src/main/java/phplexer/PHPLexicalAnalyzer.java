@@ -128,7 +128,7 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
         if (bestGuess == null) {
             // After going through all the tokens, we didn't find a match
             // Thus, throw a lexical analysis error
-            throw new LexicalAnalysisException(0, 0);
+            throw new LexicalAnalysisException();
         } else {
             // reset reader cursor to the end of consumed token's lexeme
             buffer.delete(0, bestGuess.getLexeme().length());
@@ -153,13 +153,12 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
                 if (charIndex == -1) {
                     // if its the end of file and we still didn't finish our string, then its an error
                     if (failsOnEof) {
-                        throw new LexicalAnalysisException(0, 0);
+                        throw new LexicalAnalysisException();
                     } else {
                         break;
                     }
                 }
                 nextChar = (char) charIndex;
-                buffer.append(nextChar);
             }
 
             String next = Character.toString(nextChar);
@@ -178,7 +177,7 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
             if ((next.equals("\n") || next.equals("\r")) && !isMultiline) {
                 System.out.println("Current lexeme builder " + lexemeBuilder.toString());
                 // end of line while still in the cycle, means we didn't find second ' symbol, and it's an error
-                throw new LexicalAnalysisException(0, 0);
+                throw new LexicalAnalysisException();
             }
         }
 
