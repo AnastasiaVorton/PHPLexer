@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PHPLexer.iml" filepath="$PROJECT_DIR$/PHPLexer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PHPLexer_main.iml" filepath="$PROJECT_DIR$/.idea/modules/PHPLexer_main.iml" group="PHPLexer" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PHPLexer_test.iml" filepath="$PROJECT_DIR$/.idea/modules/PHPLexer_test.iml" group="PHPLexer" />
+    </modules>
+  </component>
+</project>
