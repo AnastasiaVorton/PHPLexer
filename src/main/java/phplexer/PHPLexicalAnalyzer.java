@@ -46,6 +46,7 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
 
                 // skip end of token characters
                 if (buffer.length() == 0) continue;
+                buffer.append(next);
 
                 // reached obvious end of token
                 break;
@@ -106,6 +107,14 @@ public class PHPLexicalAnalyzer implements LexicalAnalyzer<PHPTokenInstance> {
 
                 default:
                     break;
+            }
+        }
+
+        // we don't need separation symbols in the buffer anymore
+        for (Character symbol : endOfTokenSymbols) {
+            int index;
+            while ((index = buffer.indexOf(Character.toString(symbol))) != -1) {
+                buffer.deleteCharAt(index);
             }
         }
 
