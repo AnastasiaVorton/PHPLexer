@@ -30,6 +30,7 @@ public enum PHPToken implements Token {
     /** Well, semicolon ¯\_(ツ)_/¯ */
     T_SEMICOLON(";"),
     T_COMMA(","),
+    T_COLON(":"),
     /** Namespace separator '\'. Used for accessing identifiers nested in a namespace. */
     T_NAMESPACE_SEPARATOR("\\\\"),
 
@@ -54,7 +55,7 @@ public enum PHPToken implements Token {
     T_COMMENT("\\\\/\\\\/.*|#.*|\\\\/\\\\*(.|\\\\n)*\\\\*\\\\/"),
 
     /** Integer and floating point numbers (including binary (0b10101), octal (01234) and hexadecimal (0xaf)). */
-    T_LITERAL_NUMBER("(\\d+)|\\.\\d+|0[xX][0-9a-fA-F]+|0[bB][0-1]+"),
+    T_LITERAL_NUMBER("\\.\\d+|0[xX][0-9a-fA-F]+|0[bB][0-1]+|\\d+"),
     /**
      * String literals. Must be matched manually because of its complex structure.
      */
